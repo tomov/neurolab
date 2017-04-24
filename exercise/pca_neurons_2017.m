@@ -192,27 +192,34 @@ imagesc(datak);
 % =======================
 
 % each neuron is a variable, each time point is an observation
-
-% eigenvectors = how much does each of the original neurons contribute to
-% the given eigen"neuron"
-% score matrix = how much weight you're putting on each eigenneuron at each
-% time point
 %
 % each vector in the space is a set of firing rates for all the neurons = (r1, r2, r3, .... r58)
 % each column = a time point = another vector in the space
 % so we have 5000 vectors of 58 firing rates each
 %
-% each component in old vector space = firing of a given neuron
-% each PC (in new space) = linear sum of firing of the given neurons = an "eigenneuron"
+% eigenvectors = how much does each of the original neurons contribute to
+% the given "eigenneuron"
+% score matrix = how much weight you're putting on each eigenneuron at each
+% time point
+%         i.e. the coordinate of that time point vector along the given
+%              eigenneuron axis
+%         i.e. the vector in the PC vector space
+%
+% each component/axis in old vector space = firing of a given neuron
+% each PC (in new space) = linear sum of firing of the given neurons = an "eigenneuron" or "superneuron"
 %                        = (1, 0, 0, ... 0) * w1 + (0, 1, 0 ... 0) * w2 + 
 %                          ... + (0, 0, ..., 1) * w58
 %      they're all orthogonal (almost)
 %
 % score matrix: each column = weights for how much each principle component
 % contributes to the given vector of firing rates (the given time point)
+%        = vectors transformed into the new vector space
 %
 % coefficients = each neuron (component/axis in the old space) can be expressed
-% as a linear combination of the eigenvectors/new axes = the "eigenneurons"
+% as a linear combination of the eigenvectors/new axes (the "eigenneurons")
+%      e.g. coeff(58, :) = how (0, 0, ... 1) in the old vector space i.e. the firing of neuron 58 
+%           maps to PCs in the new vector space.
+%      e.g. coeff(58, 1) = magnitude of unit firing of neuron 58 along PC 1 (projected)
 %
 % multiply coeff by score to get the original data in terms of the PCs --
 % can only use e.g. top 3 PCs
@@ -227,6 +234,9 @@ imagesc(datak);
 % btw -- # of clusters and # of PCs are generally unrelated!!!
 % can have many clusters with few PCs, or just 1 cloud and many PCs
 % separate ideas!
+%
+% so score(t,i) = magnitude of projection of vector of firing rates at time t onto PC i
+%    coeff(j,i) = magnitude of projection of unit vector along axis j (0... 0, 1, 0... 0) onto PC i
 %
 
 % to reconstruct the data matrix, multiply 
